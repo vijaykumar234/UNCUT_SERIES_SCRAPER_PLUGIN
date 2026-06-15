@@ -69,8 +69,19 @@ async function scrapePost(url) {
           }
         });
 
-const rawVideo = $('#my-video').attr('src') || null;
-const videoUrl = rawVideo ? cleanVideoUrl(rawVideo) : null;
+let rawVideo =
+    $("video#my-video").attr("src") ||
+    $("video").attr("src") ||
+    $('video#my-video source[type="video/mp4"]').attr("src") ||
+    $('video source[type="video/mp4"]').attr("src") ||
+    $("iframe").attr("src") ||  // fallback
+    null;
+
+if (!rawVideo) {
+    return res.status(404).json({ error: "Video not found" });
+}
+
+const videoUrl = cleanVideoUrl(rawVideo);
 
         
          ////////START DURATION/////////
